@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>$SHOOT — THE SHOOTING STAR 🌠🇸🇳</title>
+  <link rel="icon" href="jersey.jpg" type="image/jpeg" />
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Oswald:wght@400;600;700&family=Inter:wght@400;600&display=swap');
 
@@ -36,10 +37,12 @@
       padding: 6px 0;
       overflow: hidden;
       white-space: nowrap;
+      position: relative;
+      z-index: 100;
     }
     .ticker-inner {
       display: inline-block;
-      animation: ticker 25s linear infinite;
+      animation: ticker 20s linear infinite;
     }
     .ticker-inner span { margin: 0 40px; }
     @keyframes ticker {
@@ -57,45 +60,83 @@
       text-align: center;
       padding: 40px 20px;
       position: relative;
-      background: radial-gradient(ellipse at top, #0d3320 0%, var(--dark) 70%);
       overflow: hidden;
     }
 
-    .stars-bg {
+    /* Jersey background */
+    .hero-bg {
       position: absolute;
       inset: 0;
+      background-image: url('jersey.jpg');
+      background-size: cover;
+      background-position: center;
+      filter: brightness(0.18) saturate(1.5);
+      transform: scale(1.05);
+      animation: bgPulse 8s ease-in-out infinite;
+    }
+    @keyframes bgPulse {
+      0%,100% { transform: scale(1.05); filter: brightness(0.18) saturate(1.5); }
+      50% { transform: scale(1.12); filter: brightness(0.22) saturate(2); }
+    }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, transparent 0%, rgba(5,14,8,0.85) 70%);
+    }
+
+    /* Floating jersey copies */
+    .jersey-float {
+      position: absolute;
+      width: 300px;
+      opacity: 0.08;
+      animation: floatJersey 6s ease-in-out infinite;
       pointer-events: none;
     }
+    .jersey-float:nth-child(1) { left: -80px; top: 10%; animation-delay: 0s; }
+    .jersey-float:nth-child(2) { right: -80px; bottom: 10%; animation-delay: 2s; animation-direction: alternate-reverse; }
+    @keyframes floatJersey {
+      0%,100% { transform: translateY(0) rotate(-5deg); }
+      50% { transform: translateY(-20px) rotate(5deg); }
+    }
+
+    /* Stars */
+    .stars-bg { position: absolute; inset: 0; pointer-events: none; }
     .star-particle {
       position: absolute;
-      width: 2px;
-      height: 2px;
+      width: 2px; height: 2px;
       background: var(--gold);
       border-radius: 50%;
       animation: twinkle 3s infinite;
     }
     @keyframes twinkle {
-      0%, 100% { opacity: 0.2; }
-      50% { opacity: 1; }
+      0%,100% { opacity: 0.1; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.5); }
     }
 
-    .shooting-star-anim {
+    /* Multiple shooting stars */
+    .shoot {
       position: absolute;
-      top: 15%;
-      left: -100px;
-      width: 200px;
       height: 3px;
       background: linear-gradient(90deg, transparent, var(--gold), #fff);
       border-radius: 2px;
-      animation: shoot 4s linear infinite;
-      box-shadow: 0 0 10px var(--gold);
+      box-shadow: 0 0 12px var(--gold);
+      pointer-events: none;
+      animation: shootAnim linear infinite;
     }
-    @keyframes shoot {
-      0% { transform: translateX(-100px) translateY(0) rotate(-20deg); opacity: 0; }
-      10% { opacity: 1; }
+    .shoot:nth-child(1) { width: 200px; top: 15%; animation-duration: 3s; animation-delay: 0s; }
+    .shoot:nth-child(2) { width: 150px; top: 35%; animation-duration: 4s; animation-delay: 1.5s; }
+    .shoot:nth-child(3) { width: 250px; top: 60%; animation-duration: 3.5s; animation-delay: 0.8s; }
+    .shoot:nth-child(4) { width: 180px; top: 80%; animation-duration: 5s; animation-delay: 2.2s; }
+    @keyframes shootAnim {
+      0% { transform: translateX(-300px) translateY(0) rotate(-20deg); opacity: 0; }
+      5% { opacity: 1; }
       80% { opacity: 1; }
-      100% { transform: translateX(110vw) translateY(200px) rotate(-20deg); opacity: 0; }
+      100% { transform: translateX(110vw) translateY(150px) rotate(-20deg); opacity: 0; }
     }
+
+    /* Hero content */
+    .hero-content { position: relative; z-index: 10; }
 
     .hero-badge {
       background: rgba(245, 197, 24, 0.15);
@@ -107,17 +148,28 @@
       padding: 6px 20px;
       border-radius: 2px;
       margin-bottom: 24px;
-      text-transform: uppercase;
+      display: inline-block;
+      animation: badgePulse 2s ease-in-out infinite;
+    }
+    @keyframes badgePulse {
+      0%,100% { box-shadow: 0 0 8px rgba(245,197,24,0.3); }
+      50% { box-shadow: 0 0 24px rgba(245,197,24,0.8); }
     }
 
     .hero h1 {
       font-family: 'Black Ops One', cursive;
-      font-size: clamp(3.5rem, 12vw, 8rem);
+      font-size: clamp(4rem, 15vw, 10rem);
       line-height: 1;
       color: var(--gold);
-      text-shadow: 0 0 40px rgba(245,197,24,0.4), 0 4px 0 rgba(0,0,0,0.5);
+      text-shadow: 0 0 60px rgba(245,197,24,0.6), 0 4px 0 rgba(0,0,0,0.5);
       margin-bottom: 8px;
       letter-spacing: -2px;
+      animation: titleShake 0.1s infinite;
+    }
+    @keyframes titleShake {
+      0%,100% { transform: translateX(0) skew(0deg); }
+      25% { transform: translateX(-1px) skew(-0.3deg); }
+      75% { transform: translateX(1px) skew(0.3deg); }
     }
 
     .hero-sub {
@@ -127,35 +179,52 @@
       letter-spacing: 4px;
       margin-bottom: 20px;
       text-transform: uppercase;
+      animation: colorCycle 3s linear infinite;
+    }
+    @keyframes colorCycle {
+      0%,100% { color: #fff; }
+      33% { color: var(--gold); }
+      66% { color: #7fff7f; }
     }
 
     .hero-tagline {
       font-family: 'Oswald', sans-serif;
       font-size: clamp(1rem, 3vw, 1.4rem);
-      color: rgba(255,255,255,0.8);
+      color: rgba(255,255,255,0.85);
       max-width: 700px;
       line-height: 1.5;
-      margin-bottom: 40px;
+      margin: 0 auto 40px;
     }
-
     .hero-tagline strong { color: var(--gold); }
+
+    /* Jersey centerpiece */
+    .jersey-hero {
+      width: 220px;
+      margin: 0 auto 30px;
+      animation: jerseyBounce 1s ease-in-out infinite;
+      filter: drop-shadow(0 0 30px rgba(245,197,24,0.5));
+    }
+    @keyframes jerseyBounce {
+      0%,100% { transform: translateY(0) rotate(-2deg) scale(1); }
+      50% { transform: translateY(-12px) rotate(2deg) scale(1.03); }
+    }
 
     .btn-primary {
       display: inline-block;
       background: var(--gold);
       color: #000;
       font-family: 'Black Ops One', cursive;
-      font-size: 1.1rem;
-      padding: 16px 48px;
+      font-size: 1.2rem;
+      padding: 18px 52px;
       border-radius: 4px;
       text-decoration: none;
       letter-spacing: 2px;
-      transition: all 0.2s;
-      box-shadow: 0 0 30px rgba(245,197,24,0.4);
+      animation: btnPump 0.8s ease-in-out infinite;
+      box-shadow: 0 0 30px rgba(245,197,24,0.6);
     }
-    .btn-primary:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 50px rgba(245,197,24,0.7);
+    @keyframes btnPump {
+      0%,100% { transform: scale(1); box-shadow: 0 0 30px rgba(245,197,24,0.5); }
+      50% { transform: scale(1.06); box-shadow: 0 0 60px rgba(245,197,24,0.9); }
     }
 
     .btn-secondary {
@@ -166,40 +235,30 @@
       font-family: 'Oswald', sans-serif;
       font-weight: 600;
       font-size: 1rem;
-      padding: 15px 40px;
+      padding: 17px 40px;
       border-radius: 4px;
       text-decoration: none;
       letter-spacing: 2px;
-      transition: all 0.2s;
       margin-left: 12px;
+      transition: all 0.2s;
     }
-    .btn-secondary:hover { background: rgba(245,197,24,0.1); }
-
-    .hero-cta { margin-top: 0; }
-
-    .jersey-img {
-      position: absolute;
-      right: -60px;
-      bottom: -20px;
-      width: 420px;
-      opacity: 0.07;
-      pointer-events: none;
-    }
+    .btn-secondary:hover { background: rgba(245,197,24,0.15); }
 
     .scroll-hint {
       position: absolute;
-      bottom: 30px;
+      bottom: 24px;
       left: 50%;
       transform: translateX(-50%);
       font-size: 0.75rem;
       color: rgba(255,255,255,0.4);
       letter-spacing: 2px;
-      animation: bounce 2s infinite;
+      animation: bounce 1.5s infinite;
       text-transform: uppercase;
+      z-index: 10;
     }
     @keyframes bounce {
       0%,100% { transform: translateX(-50%) translateY(0); }
-      50% { transform: translateX(-50%) translateY(6px); }
+      50% { transform: translateX(-50%) translateY(8px); }
     }
 
     /* ======== SECTIONS ======== */
@@ -226,10 +285,19 @@
 
     /* ======== LORE ======== */
     .lore-section {
-      background: linear-gradient(180deg, var(--dark), #081510, var(--dark));
+      position: relative;
       padding: 80px 0;
+      overflow: hidden;
     }
-    .lore-inner { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+    .lore-bg {
+      position: absolute;
+      inset: 0;
+      background-image: url('jersey.jpg');
+      background-size: cover;
+      background-position: center;
+      filter: brightness(0.08) saturate(2);
+    }
+    .lore-inner { max-width: 1100px; margin: 0 auto; padding: 0 20px; position: relative; z-index: 2; }
 
     .lore-grid {
       display: grid;
@@ -242,19 +310,33 @@
     .lore-text p {
       font-size: 1.05rem;
       line-height: 1.8;
-      color: rgba(255,255,255,0.75);
+      color: rgba(255,255,255,0.8);
       margin-bottom: 20px;
     }
     .lore-text p strong { color: var(--gold); }
 
     .lore-card {
-      background: var(--card);
+      background: rgba(13,31,19,0.9);
       border: 1px solid var(--border);
       border-left: 4px solid var(--gold);
       padding: 28px;
       border-radius: 4px;
+      transition: transform 0.3s, box-shadow 0.3s;
+      animation: cardFloat 4s ease-in-out infinite;
     }
-    .lore-card .icon { font-size: 2rem; margin-bottom: 12px; }
+    .lore-card:nth-child(2) { animation-delay: 1s; }
+    .lore-card:nth-child(3) { animation-delay: 2s; }
+    @keyframes cardFloat {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+    .lore-card:hover { transform: translateY(-8px) scale(1.02); box-shadow: 0 12px 40px rgba(245,197,24,0.2); }
+
+    .lore-card .icon { font-size: 2rem; margin-bottom: 12px; animation: iconSpin 4s linear infinite; display: inline-block; }
+    @keyframes iconSpin {
+      0%,90%,100% { transform: rotate(0deg); }
+      95% { transform: rotate(360deg); }
+    }
     .lore-card h3 {
       font-family: 'Oswald', sans-serif;
       font-size: 1.1rem;
@@ -266,18 +348,57 @@
     }
     .lore-card p { font-size: 0.9rem; color: rgba(255,255,255,0.65); line-height: 1.6; }
 
-    .lore-facts {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
+    .lore-facts { display: flex; flex-direction: column; gap: 16px; }
+
+    /* ======== JERSEY SPOTLIGHT ======== */
+    .jersey-spotlight {
+      text-align: center;
+      padding: 80px 20px;
+      background: var(--card);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+    .jersey-spotlight-img {
+      width: 280px;
+      max-width: 80vw;
+      border-radius: 12px;
+      box-shadow: 0 0 80px rgba(245,197,24,0.4);
+      animation: jerseySpotlight 3s ease-in-out infinite;
+      margin: 30px auto;
+      display: block;
+    }
+    @keyframes jerseySpotlight {
+      0%,100% { box-shadow: 0 0 60px rgba(245,197,24,0.3); transform: scale(1) rotate(-1deg); }
+      50% { box-shadow: 0 0 120px rgba(245,197,24,0.7); transform: scale(1.04) rotate(1deg); }
+    }
+    .jersey-spotlight h2 { font-size: clamp(1.8rem, 5vw, 3rem); }
+    .jersey-spotlight p { color: rgba(255,255,255,0.7); font-size: 1rem; max-width: 600px; margin: 0 auto; line-height: 1.7; }
+
+    /* Spinning star decorations */
+    .deco-star {
+      position: absolute;
+      font-size: 3rem;
+      animation: spinStar 3s linear infinite;
+      opacity: 0.15;
+      pointer-events: none;
+    }
+    .deco-star:nth-child(1) { top: 10%; left: 5%; animation-duration: 4s; }
+    .deco-star:nth-child(2) { top: 70%; right: 5%; animation-duration: 3s; animation-direction: reverse; }
+    .deco-star:nth-child(3) { bottom: 10%; left: 40%; animation-duration: 5s; }
+    @keyframes spinStar {
+      from { transform: rotate(0deg) scale(1); }
+      50% { transform: rotate(180deg) scale(1.3); }
+      to { transform: rotate(360deg) scale(1); }
     }
 
     /* ======== STATS ======== */
     .stats-strip {
-      background: var(--card);
+      background: linear-gradient(135deg, var(--dark), #0a2015, var(--dark));
       border-top: 1px solid var(--border);
       border-bottom: 1px solid var(--border);
-      padding: 40px 20px;
+      padding: 50px 20px;
     }
     .stats-inner {
       max-width: 1100px;
@@ -287,12 +408,20 @@
       gap: 20px;
       text-align: center;
     }
-    .stat-item {}
+    .stat-item { animation: statPop 2s ease-in-out infinite; }
+    .stat-item:nth-child(2) { animation-delay: 0.3s; }
+    .stat-item:nth-child(3) { animation-delay: 0.6s; }
+    .stat-item:nth-child(4) { animation-delay: 0.9s; }
+    @keyframes statPop {
+      0%,100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
     .stat-value {
       font-family: 'Black Ops One', cursive;
-      font-size: 2.5rem;
+      font-size: 3rem;
       color: var(--gold);
       line-height: 1;
+      text-shadow: 0 0 20px rgba(245,197,24,0.5);
     }
     .stat-label {
       font-family: 'Oswald', sans-serif;
@@ -317,19 +446,28 @@
       border-radius: 4px;
       position: relative;
       overflow: hidden;
+      transition: all 0.3s;
     }
     .toko-card::before {
       content: '';
       position: absolute;
       top: 0; left: 0; right: 0;
       height: 3px;
-      background: var(--gold);
+      background: linear-gradient(90deg, var(--gold), #fff, var(--gold));
+      background-size: 200%;
+      animation: shimmer 2s linear infinite;
     }
+    @keyframes shimmer {
+      0% { background-position: 0%; }
+      100% { background-position: 200%; }
+    }
+    .toko-card:hover { transform: translateY(-6px); box-shadow: 0 16px 40px rgba(245,197,24,0.2); border-color: var(--gold); }
     .toko-percent {
       font-family: 'Black Ops One', cursive;
-      font-size: 3rem;
+      font-size: 3.5rem;
       color: var(--gold);
       line-height: 1;
+      text-shadow: 0 0 30px rgba(245,197,24,0.4);
     }
     .toko-name {
       font-family: 'Oswald', sans-serif;
@@ -347,7 +485,6 @@
       margin-top: 40px;
       display: flex;
       flex-direction: column;
-      gap: 0;
       position: relative;
     }
     .roadmap-list::before {
@@ -356,27 +493,37 @@
       left: 20px;
       top: 0; bottom: 0;
       width: 2px;
-      background: var(--border);
+      background: linear-gradient(180deg, var(--gold), var(--border));
     }
     .roadmap-item {
       display: flex;
       gap: 30px;
       padding: 30px 30px 30px 60px;
       position: relative;
+      transition: background 0.3s;
+      border-radius: 8px;
     }
+    .roadmap-item:hover { background: rgba(245,197,24,0.04); }
     .roadmap-item::before {
       content: '';
       position: absolute;
-      left: 13px;
-      top: 38px;
-      width: 16px;
-      height: 16px;
+      left: 13px; top: 38px;
+      width: 16px; height: 16px;
       border-radius: 50%;
       background: var(--dark);
       border: 2px solid var(--border);
+      transition: all 0.3s;
     }
-    .roadmap-item.active::before { background: var(--gold); border-color: var(--gold); box-shadow: 0 0 12px var(--gold); }
-
+    .roadmap-item.active::before {
+      background: var(--gold);
+      border-color: var(--gold);
+      box-shadow: 0 0 20px var(--gold);
+      animation: dotPulse 1s ease-in-out infinite;
+    }
+    @keyframes dotPulse {
+      0%,100% { box-shadow: 0 0 10px var(--gold); }
+      50% { box-shadow: 0 0 30px var(--gold), 0 0 50px rgba(245,197,24,0.4); }
+    }
     .roadmap-phase {
       font-family: 'Oswald', sans-serif;
       font-size: 0.75rem;
@@ -408,8 +555,24 @@
       padding: 28px;
       border-radius: 4px;
       text-align: center;
+      transition: all 0.3s;
+      animation: whyFloat 5s ease-in-out infinite;
     }
-    .why-icon { font-size: 2.5rem; margin-bottom: 16px; }
+    .why-card:nth-child(2) { animation-delay: 0.8s; }
+    .why-card:nth-child(3) { animation-delay: 1.6s; }
+    .why-card:nth-child(4) { animation-delay: 2.4s; }
+    .why-card:nth-child(5) { animation-delay: 3.2s; }
+    .why-card:nth-child(6) { animation-delay: 4s; }
+    @keyframes whyFloat {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+    .why-card:hover { transform: translateY(-12px) scale(1.02); box-shadow: 0 20px 50px rgba(245,197,24,0.2); border-color: var(--gold); }
+    .why-icon { font-size: 2.5rem; margin-bottom: 16px; display: block; animation: iconBounce 2s ease-in-out infinite; }
+    @keyframes iconBounce {
+      0%,100% { transform: scale(1); }
+      50% { transform: scale(1.2) rotate(5deg); }
+    }
     .why-card h3 {
       font-family: 'Oswald', sans-serif;
       font-size: 1rem;
@@ -423,11 +586,22 @@
 
     /* ======== CTA ======== */
     .cta-section {
-      background: radial-gradient(ellipse at center, #0d3320 0%, var(--dark) 70%);
+      position: relative;
       text-align: center;
       padding: 100px 20px;
       border-top: 1px solid var(--border);
+      overflow: hidden;
     }
+    .cta-bg {
+      position: absolute;
+      inset: 0;
+      background-image: url('jersey.jpg');
+      background-size: cover;
+      background-position: center;
+      filter: brightness(0.12) saturate(2);
+      animation: bgPulse 6s ease-in-out infinite;
+    }
+    .cta-content { position: relative; z-index: 2; }
     .cta-section h2 { font-size: clamp(2.5rem, 8vw, 5rem); }
 
     /* ======== FOOTER ======== */
@@ -456,9 +630,9 @@
       .stats-inner { grid-template-columns: repeat(2, 1fr); }
       .toko-grid { grid-template-columns: 1fr; }
       .why-grid { grid-template-columns: 1fr; }
-      .roadmap-item { padding-left: 50px; }
+      .roadmap-item { padding-left: 50px; flex-direction: column; gap: 8px; }
       .btn-secondary { margin-left: 0; margin-top: 12px; }
-      .hero-cta { display: flex; flex-direction: column; align-items: center; }
+      .hero-cta { display: flex; flex-direction: column; align-items: center; gap: 12px; }
     }
   </style>
 </head>
@@ -467,32 +641,44 @@
 <!-- TICKER -->
 <div class="ticker">
   <div class="ticker-inner">
-    <span>🌠 $SHOOT — THE FIRST SHOOTING STAR IN FOOTBALL HISTORY</span>
+    <span>🌠 $SHOOT — FIRST SHOOTING STAR JERSEY IN FOOTBALL HISTORY</span>
     <span>🇸🇳 SÉNÉGAL — LIONS OF TERANGA — FIRST TO THE STARS</span>
-    <span>⭐ NO JERSEY DOES IT LIKE THIS</span>
-    <span>🚀 $SHOOT TO THE MOON — LIKE THE STAR ON THE JERSEY</span>
-    <span>🌠 $SHOOT — THE FIRST SHOOTING STAR IN FOOTBALL HISTORY</span>
+    <span>⭐ NO JERSEY DOES IT LIKE THIS · $SHOOT TO THE MOON</span>
+    <span>🔒 LP LOCKED · 0% DEV · FAIR LAUNCH · SOLANA</span>
+    <span>🌠 $SHOOT — FIRST SHOOTING STAR JERSEY IN FOOTBALL HISTORY</span>
     <span>🇸🇳 SÉNÉGAL — LIONS OF TERANGA — FIRST TO THE STARS</span>
-    <span>⭐ NO JERSEY DOES IT LIKE THIS</span>
-    <span>🚀 $SHOOT TO THE MOON — LIKE THE STAR ON THE JERSEY</span>
+    <span>⭐ NO JERSEY DOES IT LIKE THIS · $SHOOT TO THE MOON</span>
+    <span>🔒 LP LOCKED · 0% DEV · FAIR LAUNCH · SOLANA</span>
   </div>
 </div>
 
 <!-- HERO -->
 <div class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
   <div class="stars-bg" id="stars"></div>
-  <div class="shooting-star-anim"></div>
+  <img src="jersey.jpg" class="jersey-float" alt="" />
+  <img src="jersey.jpg" class="jersey-float" alt="" style="right:-80px;bottom:10%;left:auto;" />
+  <div class="shoot"></div>
+  <div class="shoot"></div>
+  <div class="shoot"></div>
+  <div class="shoot"></div>
 
-  <div class="hero-badge">🌠 Solana · 1B Supply · Fair Launch</div>
-  <h1>$SHOOT</h1>
-  <div class="hero-sub">The Shooting Star Token</div>
-  <p class="hero-tagline">
-    Sénégal became the <strong>first nation in football history</strong> to wear a shooting star on their jersey.<br/>
-    Not just a star. A star <strong>moving.</strong> Always forward. Always up. 🇸🇳🌠
-  </p>
-  <div class="hero-cta">
-    <a href="#buy" class="btn-primary">🔥 BUY $SHOOT NOW</a>
-    <a href="#lore" class="btn-secondary">READ THE LORE</a>
+  <div class="hero-content">
+    <div class="hero-badge">🌠 Solana · 1B Supply · Fair Launch · 0% Dev</div>
+
+    <img src="jersey.jpg" class="jersey-hero" alt="Senegal Jersey" />
+
+    <h1>$SHOOT</h1>
+    <div class="hero-sub">⭐ The Shooting Star Token 🌠</div>
+    <p class="hero-tagline">
+      Sénégal is the <strong>first nation in football history</strong> to wear a shooting star on their jersey.<br/>
+      Not just a star. A star <strong>MOVING.</strong> Always forward. Always up. 🇸🇳🚀
+    </p>
+    <div class="hero-cta">
+      <a href="#buy" class="btn-primary">🔥 BUY $SHOOT NOW</a>
+      <a href="#lore" class="btn-secondary">📖 READ THE LORE</a>
+    </div>
   </div>
 
   <div class="scroll-hint">↓ SCROLL ↓</div>
@@ -515,37 +701,41 @@
     </div>
     <div class="stat-item">
       <div class="stat-value">#1</div>
-      <div class="stat-label">First Ever Shooting Star Jersey</div>
+      <div class="stat-label">Shooting Star Jersey Ever</div>
     </div>
   </div>
 </div>
 
+<!-- JERSEY SPOTLIGHT -->
+<div class="jersey-spotlight">
+  <div class="deco-star">🌠</div>
+  <div class="deco-star">⭐</div>
+  <div class="deco-star">🌟</div>
+  <h2>THE JERSEY THAT<br/><span>BROKE THE INTERNET</span></h2>
+  <p>Every nation has stars above their crest. <strong style="color:var(--gold)">Only Sénégal has a shooting star.</strong> A star that moves. A star that flies. A star that can't be stopped.</p>
+  <img src="jersey.jpg" class="jersey-spotlight-img" alt="Senegal Shooting Star Jersey" />
+  <p style="color:var(--gold); font-family:'Oswald',sans-serif; font-size:1.2rem; letter-spacing:2px; font-weight:700;">THE ONLY JERSEY WHERE THE STAR MOVES 🌠</p>
+</div>
+
 <!-- LORE -->
 <div class="lore-section" id="lore">
+  <div class="lore-bg"></div>
   <div class="lore-inner">
     <div class="section-label">// origin story</div>
     <h2>THE JERSEY THAT<br/><span>CHANGED EVERYTHING</span></h2>
 
     <div class="lore-grid">
       <div class="lore-text">
-        <p>
-          Every football nation has stars on their jersey. Brazil. France. Germany. They count their trophies, stitch them above the crest, and call it history.
-        </p>
-        <p>
-          Then came <strong>Sénégal</strong>. They didn't just add a star. They made it <strong>move</strong>. A shooting star — blazing, alive, unstoppable — embroidered right there on the chest of the Lions of Teranga.
-        </p>
-        <p>
-          <strong>First nation in football history</strong> to put a shooting star on their jersey. Not a static gold badge. A star that <strong>flies.</strong>
-        </p>
-        <p>
-          $SHOOT is that energy tokenized. The spirit of a nation that doesn't follow the playbook. They write their own. 🌠🇸🇳
-        </p>
+        <p>Every football nation has stars on their jersey. Brazil. France. Germany. They count their trophies, stitch them above the crest, and call it history.</p>
+        <p>Then came <strong>Sénégal</strong>. They didn't just add a star. They made it <strong>move</strong>. A shooting star — blazing, alive, unstoppable — embroidered right there on the chest of the Lions of Teranga.</p>
+        <p><strong>First nation in football history</strong> to put a shooting star on their jersey. Not a static gold badge. A star that <strong>FLIES.</strong></p>
+        <p>$SHOOT is that energy tokenized. The spirit of a nation that doesn't follow the playbook. They write their own. 🌠🇸🇳</p>
       </div>
       <div class="lore-facts">
         <div class="lore-card">
           <div class="icon">⭐</div>
           <h3>Every Nation Has Stars</h3>
-          <p>Brazil, France, Italy — they all count trophies. Static badges. Frozen history. Same old template.</p>
+          <p>Brazil, France, Italy — they all count trophies. Static badges. Frozen history. Same old template for 100 years.</p>
         </div>
         <div class="lore-card">
           <div class="icon">🌠</div>
@@ -555,7 +745,7 @@
         <div class="lore-card">
           <div class="icon">🦁</div>
           <h3>Lions Don't Walk. They Charge.</h3>
-          <p>CAN 2021. CAN 2025. Sadio. Pape Gueye. Mendy. A generation of Lions that refused to stay still. The shooting star is their sigil.</p>
+          <p>CAN 2021. CAN 2025. A generation of Lions that refused to stay still. The shooting star is their sigil — and now it's on-chain.</p>
         </div>
       </div>
     </div>
@@ -568,34 +758,34 @@
   <h2>THE SHOOTING STAR<br/><span>THEORY 🌠</span></h2>
   <div class="why-grid">
     <div class="why-card">
-      <div class="why-icon">🌠</div>
+      <span class="why-icon">🌠</span>
       <h3>Unique Lore Forever</h3>
       <p>This fact will never change. Sénégal will always be the first. The lore is permanent — written in football history, now written on-chain.</p>
     </div>
     <div class="why-card">
-      <div class="why-icon">🦁</div>
+      <span class="why-icon">🦁</span>
       <h3>Teranga Energy</h3>
-      <p>"Teranga" means hospitality in Wolof. The whole world is welcome in this army. $SHOOT isn't just for Sénégal — it's for every fan of the beautiful game.</p>
+      <p>"Teranga" means hospitality in Wolof. The whole world is welcome. $SHOOT isn't just for Sénégal — it's for every fan of the beautiful game.</p>
     </div>
     <div class="why-card">
-      <div class="why-icon">🚀</div>
+      <span class="why-icon">🚀</span>
       <h3>Shooting Stars Go Up</h3>
       <p>That's literally what they do. A shooting star on the jersey. A shooting token on Solana. The chart is already written in the stars. WAGMI.</p>
     </div>
     <div class="why-card">
-      <div class="why-icon">🏆</div>
+      <span class="why-icon">🏆</span>
       <h3>CAN Champions</h3>
       <p>2021. 2025. Back to back African champions. The shooting star didn't just look cool — it brought glory. Now it's bringing gains.</p>
     </div>
     <div class="why-card">
-      <div class="why-icon">⚡</div>
+      <span class="why-icon">⚡</span>
       <h3>Fair Launch</h3>
-      <p>0% dev wallet. LP locked. No presale nonsense. Just vibes, lore, and a shooting star going to the moon. DYOR. NFA. WAGMI.</p>
+      <p>0% dev wallet. LP locked. No presale. Just vibes, lore, and a shooting star going to the moon. DYOR. NFA. WAGMI.</p>
     </div>
     <div class="why-card">
-      <div class="why-icon">🌍</div>
+      <span class="why-icon">🌍</span>
       <h3>Africa's Token</h3>
-      <p>Not just Sénégal. Every African who's ever watched a Lion roar on the pitch. Every fan who knows greatness when they see it. $SHOOT is continental.</p>
+      <p>Not just Sénégal. Every African who's watched a Lion roar on the pitch. Every fan who knows greatness when they see it. $SHOOT is continental.</p>
     </div>
   </div>
 </section>
@@ -608,7 +798,7 @@
     <div class="toko-card">
       <div class="toko-percent">1B</div>
       <div class="toko-name">Total Supply</div>
-      <div class="toko-desc">One billion $SHOOT. One for every fan who saw that shooting star and felt something. All of it on-chain, forever.</div>
+      <div class="toko-desc">One billion $SHOOT. One for every fan who saw that shooting star and felt something. All on-chain, forever.</div>
     </div>
     <div class="toko-card">
       <div class="toko-percent">40%</div>
@@ -651,14 +841,14 @@
       <div class="roadmap-phase">Phase 03<br/>World Cup</div>
       <div class="roadmap-content">
         <h3>⚽ WORLD CUP 2026 ARC</h3>
-        <p>Sénégal at the World Cup. $SHOOT pumps every goal. Limited NFT collection: "Shooting Star Moments". The whole world watches the Lions. The whole world sees $SHOOT.</p>
+        <p>Sénégal at the World Cup. $SHOOT pumps every goal. Limited NFT collection: "Shooting Star Moments". The whole world sees $SHOOT.</p>
       </div>
     </div>
     <div class="roadmap-item">
       <div class="roadmap-phase">Phase 04<br/>Destiny</div>
       <div class="roadmap-content">
         <h3>🌠 THE STARS ARE OURS</h3>
-        <p>Major exchange listings. Official partnership talks. The shooting star jersey becomes a cultural icon. $SHOOT becomes the memecoin of an entire continent. Lore complete.</p>
+        <p>Major exchange listings. Official partnership talks. The shooting star jersey becomes a cultural icon. $SHOOT becomes the memecoin of an entire continent.</p>
       </div>
     </div>
   </div>
@@ -666,12 +856,15 @@
 
 <!-- CTA -->
 <div class="cta-section" id="buy">
-  <div class="section-label" style="display:block; text-align:center;">// join the army</div>
-  <h2>THE STAR IS<br/><span>ALREADY FLYING 🌠</span></h2>
-  <p style="color: rgba(255,255,255,0.65); font-size: 1.1rem; max-width: 600px; margin: 0 auto 40px; line-height: 1.7;">
-    Every nation has stars. Only one has a <strong style="color:var(--gold)">shooting star</strong>.<br/>Get on board before it's too far gone to catch.
-  </p>
-  <a href="#" class="btn-primary" style="font-size: 1.2rem; padding: 20px 60px;">🔥 BUY $SHOOT NOW</a>
+  <div class="cta-bg"></div>
+  <div class="cta-content">
+    <div class="section-label" style="display:block; text-align:center;">// join the army</div>
+    <h2>THE STAR IS<br/><span>ALREADY FLYING 🌠</span></h2>
+    <p style="color: rgba(255,255,255,0.7); font-size: 1.1rem; max-width: 600px; margin: 0 auto 40px; line-height: 1.7;">
+      Every nation has stars. Only one has a <strong style="color:var(--gold)">shooting star</strong>.<br/>Get on board before it's too far gone to catch.
+    </p>
+    <a href="#" class="btn-primary" style="font-size: 1.2rem; padding: 20px 60px;">🔥 BUY $SHOOT NOW</a>
+  </div>
 </div>
 
 <!-- FOOTER -->
@@ -684,29 +877,34 @@
       <a href="#">PUMP.FUN</a>
       <a href="#">RAYDIUM</a>
     </div>
-    <p style="color: var(--gold); font-family: 'Black Ops One', cursive; font-size: 1.1rem; margin-bottom: 12px;">$SHOOT 🌠 · SENEGAL SHOOTING STAR</p>
-    <p class="disclaimer">
-      ⚠ ENTERTAINMENT ONLY. $SHOOT is a meme token for entertainment and cultural purposes. Not affiliated with the Fédération Sénégalaise de Football, FIFA, or any player. Not financial advice. DYOR. NFA. WAGMI.
-    </p>
+    <p style="color: var(--gold); font-family: 'Black Ops One', cursive; font-size: 1.1rem; margin-bottom: 12px;">$SHOOT 🌠 · SENEGAL SHOOTING STAR · SOLANA</p>
+    <p class="disclaimer">⚠ ENTERTAINMENT ONLY. $SHOOT is a meme token for entertainment and cultural purposes. Not affiliated with the Fédération Sénégalaise de Football, FIFA, or any player. Not financial advice. DYOR. NFA. WAGMI.</p>
   </div>
 </footer>
 
 <script>
-  // Generate star particles
+  // Star particles
   const bg = document.getElementById('stars');
-  for (let i = 0; i < 80; i++) {
+  for (let i = 0; i < 100; i++) {
     const s = document.createElement('div');
     s.className = 'star-particle';
     s.style.cssText = `
-      left: ${Math.random()*100}%;
-      top: ${Math.random()*100}%;
-      animation-delay: ${Math.random()*3}s;
-      animation-duration: ${2 + Math.random()*3}s;
-      width: ${Math.random() > 0.8 ? '3px' : '2px'};
-      height: ${Math.random() > 0.8 ? '3px' : '2px'};
+      left:${Math.random()*100}%;
+      top:${Math.random()*100}%;
+      animation-delay:${Math.random()*4}s;
+      animation-duration:${1.5+Math.random()*3}s;
+      width:${Math.random()>0.8?'3px':'2px'};
+      height:${Math.random()>0.8?'3px':'2px'};
+      opacity:${0.3+Math.random()*0.7};
     `;
     bg.appendChild(s);
   }
+
+  // Titre qui pulse au rythme
+  const h1 = document.querySelector('.hero h1');
+  setInterval(() => {
+    h1.style.textShadow = `0 0 ${60+Math.random()*40}px rgba(245,197,24,${0.4+Math.random()*0.4}), 0 4px 0 rgba(0,0,0,0.5)`;
+  }, 200);
 </script>
 
 </body>
